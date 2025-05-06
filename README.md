@@ -1,260 +1,125 @@
-SISTEM RESERVASI RESTORAN
+Here's the formatted version of your restaurant reservation system documentation:
 
+```markdown
+## <p align="center" style="margin-top: 0;">SISTEM RESERVASI RESTORAN</p>
 
+<p align="center">
+  <img src="/public/LogoUnsulbar.png" width="300" alt="LogoUnsulbar" />
+</p>
 
+### <p align="center">RIZKY ADIWIJAYA</p>
 
+### <p align="center">D022045</p></br>
 
+### <p align="center">FRAMEWORK WEB BASED</p>
 
+### <p align="center">2025</p>
 
+---
 
+## 🧑‍🤝‍🧑 Role dan Hak Akses
 
+| Role         | Akses                                                                              |
+|--------------|-----------------------------------------------------------------------------------|
+| **Admin**    | Mengelola data pengguna, kategori menu, item menu, reservasi, laporan transaksi, dan penunjukan chef |
+| **Customer** | Melihat menu, melakukan reservasi, memesan makanan, melihat riwayat pesanan, memberikan permintaan khusus |
+| **Chef**     | Melihat daftar pesanan, memperbarui status pesanan, melihat item menu yang ditugaskan |
 
+---
 
+## 🗃️ Struktur Database
 
+### 1. Tabel `users`
 
+| Field          | Tipe Data        | Keterangan                              |
+|----------------|------------------|----------------------------------------|
+| id             | bigint (PK)      | ID unik                                |
+| nama           | varchar          | Nama lengkap user                      |
+| email          | varchar (unique) | Alamat email                           |
+| password       | varchar          | Password terenkripsi                   |
+| role           | enum             | admin, customer, chef (default: customer) |
+| no_hp          | varchar          | Nomor telepon (opsional)               |
+| alamat         | text             | Alamat lengkap (opsional)              |
+| remember_token | varchar          | Token untuk remember me                |
+| created_at     | timestamp        | Tanggal dibuat                         |
+| updated_at     | timestamp        | Tanggal update                         |
 
-RIZKY ADIWIJAYA
-D0222045
+### 2. Tabel `kategori`
 
+| Field      | Tipe Data   | Keterangan                     |
+|------------|-------------|-------------------------------|
+| id         | bigint (PK) | ID kategori                   |
+| nama       | varchar     | Nama kategori                 |
+| slug       | varchar     | URL-friendly version dari nama |
+| deskripsi  | text        | Penjelasan tentang kategori   |
+| created_at | timestamp   | Tanggal dibuat                |
+| updated_at | timestamp   | Tanggal update                |
 
+### 3. Tabel `menu_items`
 
+| Field        | Tipe Data   | Keterangan                     |
+|--------------|-------------|-------------------------------|
+| id           | bigint (PK) | ID menu                       |
+| kategori_id  | bigint (FK) | Relasi ke `kategori`          |
+| nama         | varchar     | Nama menu item                |
+| slug         | varchar     | URL-friendly version dari nama |
+| deskripsi    | text        | Detail tentang menu           |
+| harga        | decimal     | Harga menu (2 digit desimal)  |
+| gambar       | varchar     | Path/link ke gambar menu      |
+| is_available | boolean     | Status ketersediaan           |
+| created_at   | timestamp   | Tanggal dibuat                |
+| updated_at   | timestamp   | Tanggal update                |
 
+### 4. Tabel `reservasi`
 
+| Field            | Tipe Data   | Keterangan                      |
+|------------------|-------------|--------------------------------|
+| id               | bigint (PK) | ID reservasi                   |
+| user_id          | bigint (FK) | Relasi ke `users`              |
+| tanggal_reservasi| date        | Tanggal reservasi              |
+| waktu_reservasi  | time        | Jam reservasi                  |
+| jumlah_tamu      | integer     | Jumlah orang                   |
+| special_request  | text        | Permintaan khusus              |
+| status           | enum        | pending, confirmed, cancelled  |
+| created_at       | timestamp   | Tanggal dibuat                 |
+| updated_at       | timestamp   | Tanggal update                 |
 
-FRAMEWORK WEB BASED
-2025
+### 5. Tabel `orders`
 
+| Field        | Tipe Data   | Keterangan                      |
+|--------------|-------------|--------------------------------|
+| id           | bigint (PK) | ID pesanan                     |
+| user_id      | bigint (FK) | Relasi ke `users`              |
+| reservasi_id | bigint (FK) | Relasi ke `reservasi`          |
+| total_harga  | decimal     | Total harga pesanan            |
+| status       | enum        | Status pesanan                 |
+| catatan      | text        | Catatan khusus                 |
+| created_at   | timestamp   | Tanggal dibuat                 |
+| updated_at   | timestamp   | Tanggal update                 |
 
-ROLE : 
-1. Admin
-Berperan sebagai pengelola utama sistem restoran.
-Fitur yang bisa dilakukan:
-* Mengelola data pengguna.
-* Menambah, mengedit, dan menghapus kategori menu.
-* Menambah, mengedit, dan menghapus item menu.
-* Melihat semua reservasi dan mengubah statusnya.
-* Melihat laporan transaksi dan statistik restoran.
-* Mengelola semua pesanan termasuk penunjukan chef.
+### 6. Tabel `order_items`
 
-2. Customer
-Berperan sebagai pelanggan restoran yang menggunakan sistem untuk reservasi dan pemesanan makanan.
-Fitur yang bisa dilakukan:
-* Mendaftar dan login ke dalam sistem.
-* Melihat daftar menu dan kategori makanan.
-* Melakukan reservasi meja dengan memilih tanggal, waktu, jumlah tamu, dan permintaan khusus.
-* Melakukan pemesanan makanan sebelum atau saat reservasi.
-* Melihat riwayat pesanan dan statusnya.
-* Memberikan permintaan khusus untuk makanan 
+| Field           | Tipe Data   | Keterangan                      |
+|-----------------|-------------|--------------------------------|
+| id              | bigint (PK) | ID item pesanan                |
+| order_id        | bigint (FK) | Relasi ke `orders`             |
+| menu_item_id    | bigint (FK) | Relasi ke `menu_items`         |
+| quantity        | integer     | Jumlah item yang dipesan       |
+| price           | decimal     | Harga per item                |
+| special_request | text        | Permintaan khusus untuk item   |
+| created_at      | timestamp   | Tanggal dibuat                 |
+| updated_at      | timestamp   | Tanggal update                 |
 
-3. Chef
-Berperan sebagai Koki atau juru masak yang menangani persiapan makanan.
-Fitur yang bisa dilakukan:
-* Melihat daftar pesanan makanan yang ditugaskan kepadanya.
-* Memperbarui status pesanan dari "preparing" ? "ready" ? "delivered".
-* Melihat item menu yang ditugaskan.
+---
 
+## 🔗 Relasi Antar Tabel
 
-Tabel-tabel database beserta field dan tipe datanya.
-
-1. Tabel Users
-Field
-Tipe Data
-Keterangan
-id
-bigint (auto inc)
-Primary key
-nama
-string
-Nama lengkap user
-email
-string
-Alamat email (unik)
-password
-string
-Password yang di-hash
-role
-enum
-Peran user: 'admin', 'customer', atau 'chef' (default: 'customer')
-no_hp
-string (nullable)
-Nomor telepon (opsional)
-alamat
-text (nullable)
-Alamat lengkap (opsional)
-remember_token
-string (nullable)
-Token untuk remember me functionality
-created_at
-timestamp
-Waktu pembuatan record
-updated_at
-timestamp
-Waktu terakhir update record
-
-
-2. Tabel Kategori 
-Field
-Tipe Data
-Keterangan
-id
-bigint (auto inc)
-Primary key
-nama
-string
-Nama kategori
-Slug
-string
-URL-friendly version dari nama (unik)
-deskripsi
-text
-Penjelasan tentang kategori (opsional)
-Created_at
-timestamp
-Waktu pembuatan record
-Updated_at
-timestamp
-Waktu terakhir update record
-
-Relasi antar tabel:
-* kategori ke menu_items: One-to-Many (satu kategori bisa memiliki banyak menu)
-
-3. Tabel Menu_items
-Field
-Tipe Data
-Keterangan
-id
-Bigint(auto inc)
-Primary key
-kategori_id
-bigint
-Foreign key ke tabel kategori (relasi many-to-one)
-nama
-string
-Nama menu item
-slug
-string
-URL-friendly version dari nama (unik)
-deskripsi
-text
-Detail tentang menu
-harga
-decimal(10,2)
-Harga menu (2 digit desimal)
-gambar
-string (nullable)
-Path/link ke gambar menu (opsional)
-is_available
-boolean
-Status ketersediaan (default: true)
-created_at
-timestamp
-Waktu pembuatan record
-Updated_at
-timestamp
-Waktu terakhir update record
-
-Relasi antar tabel:
-* kategori ke menu_items: One-to-Many (satu kategori bisa memiliki banyak menu
-
-4. Tabel Reservasi
-Field
-Tipe Data
-Keterangan
-id
-bigint (auto inc)
-Primary key
-user_id
-bigint
-Foreign key ke tabel users (customer yang memesan)
-tanggal_reservasi
-date
-Tanggal reservasi
-waktu_reservasi
-time
-Jam reservasi
-jumlah_tamu
-integer
-Jumlah orang yang akan datang
-special_request
-text (nullable)
-Permintaan khusus (opsional)
-status
-enum
-Status reservasi: 'pending', 'confirmed', 'cancelled' (default: 'pending')
-created_at
-timestamp
-Waktu pembuatan record
-updated_at
-timestamp
-Waktu terakhir update record
-
-Relasi antar tabel:
-* users ke reservasi: One-to-Many (seorang customer bisa memiliki banyak reservasi)
-
-5. Tabel Orders
-Field
-Tipe Data
-Keterangan
-id
-bigint (auto inc)
-Primary key
-user_id
-bigint
-Foreign key ke tabel users (customer yang memesan)
-reservasi_id
-bigint (nullable)
-Foreign key ke tabel reservasi (jika terkait reservasi)
-total_harga
-decimal(12,2)
-Total harga pesanan (12 digit, 2 desimal)
-status
-enum
-Status pesanan: 'pending', 'preparing', 'ready', 'delivered', 'cancelled'
-catatan
-text (nullable)
-Catatan khusus untuk pesanan (opsional)
-created_at
-timestamp
-Waktu pembuatan record
-updated_at
-timestamp
-Waktu terakhir update record
-
-Relasi antar tabel:
-* users ke orders: One-to-Many (seorang customer bisa memiliki banyak pesanan)
-* reservasi ke orders: One-to-Many (satu reservasi bisa memiliki banyak pesanan)
-
-6. Tabel Order_items
-Field
-Tipe Data
-Keterangan
-id
-bigint (auto inc)
-Primary key
-order_id
-bigint
-Foreign key ke tabel orders
-menu_item_id
-bigint
-Foreign key ke tabel menu_items
-quantity
-integer
-Jumlah item yang dipesan
-price
-decimal(10,2)
-Harga per item saat dipesan (2 digit desimal)
-special_request
-text (nullable)
-Permintaan khusus untuk item ini (opsional)
-created_at
-timestamp
-Waktu pembuatan record
-updated_at
-timestamp
-Waktu terakhir update record
-
-Relasi antar tabel:
-* orders ke order_items: One-to-Many (satu order bisa memiliki banyak item)
-* menu_items ke order_items: One-to-Many (satu menu bisa muncul di banyak order)
-
-
+| Tabel Asal  | Tabel Tujuan | Relasi       | Penjelasan                                    |
+|-------------|--------------|-------------|----------------------------------------------|
+| users       | reservasi    | one-to-many | Satu user bisa memiliki banyak reservasi     |
+| users       | orders       | one-to-many | Satu user bisa memiliki banyak pesanan       |
+| kategori    | menu_items   | one-to-many | Satu kategori bisa memiliki banyak menu      |
+| reservasi   | orders       | one-to-many | Satu reservasi bisa memiliki banyak pesanan  |
+| orders      | order_items  | one-to-many | Satu order bisa memiliki banyak item pesanan |
+| menu_items  | order_items  | one-to-many | Satu menu bisa muncul di banyak order        |
+```
