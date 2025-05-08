@@ -116,7 +116,7 @@
 | users       | reservasi    | one-to-many | Satu user bisa memiliki banyak reservasi     |
 | users       | orders       | one-to-many | Satu user bisa memiliki banyak pesanan       |
 | kategori    | menu_items   | one-to-many | Satu kategori bisa memiliki banyak menu      |
-| reservasi   | orders       | one-to-one | Satu reservasi memiliki satu pesanan          |
+| reservasi   | orders       | one-to-one | Satu reservasi memiliki satu orders           |
 | orders      | order_items  | one-to-many | Satu order bisa memiliki banyak item pesanan |
 | menu_items  | order_items  | one-to-many | Satu menu bisa muncul di banyak order        |
 ```
