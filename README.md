@@ -19,7 +19,7 @@
 | Role         | Akses                                                                              |
 |--------------|-----------------------------------------------------------------------------------|
 | **Admin**    | Mengelola data pengguna, kategori menu, item menu, reservasi, laporan transaksi, dan penunjukan chef |
-| **Customer** | Melihat menu, melakukan reservasi, memesan makanan, melihat riwayat pesanan, memberikan permintaan khusus |
+| **Customer** | Melihat menu, melakukan reservasi, memesan makanan, |
 | **Chef**     | Melihat daftar pesanan, memperbarui status pesanan, melihat item menu yang ditugaskan |
 
 ---
@@ -111,12 +111,12 @@
 
 ## 🔗 Relasi Antar Tabel
 
-| Tabel Asal  | Tabel Tujuan | Relasi      | Penjelasan                                  |
+| Tabel Asal  | Tabel Tujuan | Relasi      | Penjelasan                                   |
 |-------------|--------------|-------------|----------------------------------------------|
 | users       | reservasi    | one-to-many | Satu user bisa memiliki banyak reservasi     |
 | users       | orders       | one-to-many | Satu user bisa memiliki banyak pesanan       |
 | kategori    | menu_items   | one-to-many | Satu kategori bisa memiliki banyak menu      |
-| reservasi   | orders       | one-to-many | Satu reservasi bisa memiliki banyak pesanan  |
+| reservasi   | orders       | one-to-one | Satu reservasi memiliki satu pesanan          |
 | orders      | order_items  | one-to-many | Satu order bisa memiliki banyak item pesanan |
 | menu_items  | order_items  | one-to-many | Satu menu bisa muncul di banyak order        |
 ```
