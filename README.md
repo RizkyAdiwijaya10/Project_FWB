@@ -20,7 +20,7 @@
 |--------------|-----------------------------------------------------------------------------------|
 | **Admin**    | Mengelola data pengguna, kategori menu, item menu, reservasi, laporan transaksi, dan penunjukan chef |
 | **Customer** | Melihat menu, melakukan reservasi, memesan makanan, |
-| **Chef**     | Melihat daftar pesanan, memperbarui status pesanan, melihat item menu yang ditugaskan |
+| **Chef**     | Memperbarui status pesanan, melihat item menu yang ditugaskan|
 
 ---
 
